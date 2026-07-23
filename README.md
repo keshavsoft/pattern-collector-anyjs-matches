@@ -1,40 +1,45 @@
-# pattern-collector 🔍
+# pattern-collector-anyjs-matches 🔍
 
-> **A high-performance pattern collector and ESM import statement analyzer for JavaScript.**
+> **A high-performance pattern matching and line tracking utility for JavaScript/ESM, wrapping pattern-collector.**
 
-[![npm version](https://img.shields.io/npm/v/pattern-collector.svg?style=flat-square&color=38bdf8)](https://www.npmjs.com/package/pattern-collector)
-[![license](https://img.shields.io/npm/l/pattern-collector.svg?style=flat-square&color=34d399)](LICENSE)
+[![npm version](https://img.shields.io/npm/v/pattern-collector-anyjs-matches.svg?style=flat-square&color=38bdf8)](https://www.npmjs.com/package/pattern-collector-anyjs-matches)
+[![license](https://img.shields.io/npm/l/pattern-collector-anyjs-matches.svg?style=flat-square&color=34d399)](LICENSE)
 
 🔗 **Quick Links:**
-*   📦 **NPM Registry**: [npmjs.com/package/pattern-collector](https://www.npmjs.com/package/pattern-collector)
-*   💻 **GitHub Repo**: [github.com/keshavsoft/pattern-collector](https://github.com/keshavsoft/pattern-collector)
-*   📄 **Interactive Docs**: [keshavsoft.github.io/pattern-collector](https://keshavsoft.github.io/pattern-collector/)
-*   ⚙️ **Publish Workflow**: [.github/workflows/npm-publish.yml](file:///d:/KeshavSoftRepos/2026-07-18/ks6/pattern-collector/.github/workflows/npm-publish.yml)
+*   📦 **NPM Registry**: [npmjs.com/package/pattern-collector-anyjs-matches](https://www.npmjs.com/package/pattern-collector-anyjs-matches)
+*   💻 **GitHub Repo**: [github.com/keshavsoft/pattern-collector-anyjs-matches](https://github.com/keshavsoft/pattern-collector-anyjs-matches)
+*   📄 **Interactive Docs**: [keshavsoft.github.io/pattern-collector-anyjs-matches](https://keshavsoft.github.io/pattern-collector-anyjs-matches/)
+*   ⚙️ **Publish Workflow**: [.github/workflows/npm-publish.yml](file:///d:/KeshavSoftRepos/2026-07-23(1)/pattern-collector-anyjs-matches/.github/workflows/npm-publish.yml)
 
 ---
 
 ## 📖 Overview
 
-`pattern-collector` is a zero-dependency, lightweight JavaScript library designed to scan file content and collect substrings that match a specified pattern or regular expression. 
+`pattern-collector-anyjs-matches` is a lightweight wrapper around `pattern-collector`. It accepts a file content string and a regular expression, runs the regex match, and returns all matches along with line contents and 1-indexed line numbers.
 
-It serves as a fast and flexible engine, enabling easy parsing, extraction, and static analysis of source files (such as locating ES Module imports, decorators, function declarations, or other syntactic patterns).
+This utility serves as the parsing step for extracting imports, function usage, and other patterns downstream.
 
 ---
 
 ## ✨ Features
 
-*   **⚡ Zero Dependencies**: Light, fast, and secure.
-*   **🧩 Flexible Matching**: Collects any patterns by accepting custom global Regular Expressions.
+*   **⚡ Zero External Dependencies**: Relying only on the lightweight `pattern-collector` core.
+*   **🏷️ Line & Line Number Tracking**: Automatically calculates the exact line number where each match occurred.
 *   **📦 ESM Native**: Built for modern ES module environments.
-*   **🏷️ Versioned Under the Hood**: Uses an extensible directory-based versioned core.
 
 ---
 
 ## 🚀 Installation
 
 ```bash
-npm install pattern-collector
+npm install pattern-collector-anyjs-matches
 ```
+
+---
+
+## 🔗 Dependency Chain
+
+*   [`pattern-collector`](https://www.npmjs.com/package/pattern-collector) - listed in [`package.json`](package.json) as `^1.5.10`.
 
 ---
 
@@ -42,47 +47,54 @@ npm install pattern-collector
 
 ### `default(options)`
 
-The default export is a function that collects all occurrences of a pattern in the given text.
+The default export is a function that collects all occurrences of a search regex in the file.
 
 #### Parameters
 
 An options object containing:
 
 *   **`fileContent`** `(string)`: The raw text or code content to search.
-*   **`searchString`** `(RegExp)`: A regular expression with the global (`g`) flag to match patterns in the content.
+*   **`searchRegex`** `(RegExp)`: A regular expression with the global (`g`) flag to match patterns in the content.
+*   **`showLog`** `(boolean)` *(optional)*: Whether to log debugging output.
 
 #### Returns
 
-*   `(string[])`: An array of matches found. If no matches are found, it returns an empty array.
+*   `Object[]`: An array of matches found. If no matches are found, it returns an empty array.
+    *   `match` `(string)`: The exact matched substring.
+    *   `line` `(string)`: The full line of code containing the match.
+    *   `lineNumber` `(number)`: The 1-indexed line number in the source file.
 
 ---
 
 ## 💻 Usage Example
 
 ```javascript
-import patternCollector from 'pattern-collector';
+import getAllMatches from 'pattern-collector-anyjs-matches';
 
 const code = `
 import { exec } from "child_process";
 import dotenv from 'dotenv';
-import express from "express";
-
-const PORT = 3000;
 `;
 
-// Extract all import statements
-const imports = patternCollector({
+const matches = getAllMatches({
   fileContent: code,
-  searchString: /import\s+[\s\S]*?\s+from\s+['"][^'"]+['"]/g
+  searchRegex: /import\s+[\s\S]*?\s+from\s+['"][^'"]+['"]/g
 });
 
-console.log(imports);
+console.log(matches);
 /*
 Output:
 [
-  'import { exec } from "child_process"',
-  "import dotenv from 'dotenv'",
-  'import express from "express"'
+  {
+    match: 'import { exec } from "child_process"',
+    line: 'import { exec } from "child_process";',
+    lineNumber: 2
+  },
+  {
+    match: "import dotenv from 'dotenv'",
+    line: "import dotenv from 'dotenv';",
+    lineNumber: 3
+  }
 ]
 */
 ```
