@@ -50,14 +50,13 @@ jobs:
             echo "has_changes=false" >> $GITHUB_OUTPUT
           else
             npm version patch --no-git-tag-version
+            export NODE_AUTH_TOKEN=$(echo -n "${{ secrets.NPM_TOKEN }}" | tr -d '\r\n ')
             npm publish
             git add package.json package-lock.json
             git commit -m "chore: update dependencies and bump version"
             git push origin main
             echo "has_changes=true" >> $GITHUB_OUTPUT
           fi
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Create Summary
         run: |

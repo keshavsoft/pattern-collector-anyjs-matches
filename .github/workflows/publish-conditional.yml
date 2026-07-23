@@ -42,14 +42,13 @@ jobs:
             echo "* **Status**: ⚠️ Skipped (Version $PACKAGE_VERSION is already published on NPM)" >> $GITHUB_STEP_SUMMARY
             echo "was_published=false" >> $GITHUB_OUTPUT
           else
+            export NODE_AUTH_TOKEN=$(echo -n "${{ secrets.NPM_TOKEN }}" | tr -d '\r\n ')
             npm publish
             echo "* **After Publish Version**: \`$PACKAGE_VERSION\`" >> $GITHUB_STEP_SUMMARY
             echo "* **Status**: ✅ Successfully Published to NPM" >> $GITHUB_STEP_SUMMARY
             echo "was_published=true" >> $GITHUB_OUTPUT
           fi
           echo "* **Registry Link**: [https://www.npmjs.com/package/$PACKAGE_NAME](https://www.npmjs.com/package/$PACKAGE_NAME)" >> $GITHUB_STEP_SUMMARY
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
   notify-dependents:
     needs: publish
