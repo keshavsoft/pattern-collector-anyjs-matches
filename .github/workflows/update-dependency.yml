@@ -38,7 +38,7 @@ jobs:
 
       - name: Run Tests
         run: |
-          node test/v2/test.js
+          node run-tests.js
 
       - name: Commit and push changes
         id: git-push
