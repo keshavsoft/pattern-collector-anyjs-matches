@@ -1,0 +1,19 @@
+import fs from 'fs';
+import path from 'path';
+
+import defaultFunc from '../../index.js';
+
+const filePath = path.join(process.cwd(), "routes.js");
+
+const fileContent = fs.readFileSync(filePath, 'utf8');
+
+const searchString = /^[ \t]*import\b.*from\s+['"]\.[^'"]*['"];/gm;
+
+const k1 = defaultFunc({
+    fileContent,
+    searchRegex: searchString,
+    showLog: true
+});
+
+console.log("ssssssssss : ", k1);
+
