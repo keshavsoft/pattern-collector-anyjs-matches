@@ -52,7 +52,7 @@ jobs:
 
   notify-dependents:
     needs: publish
-    if: needs.publish.outputs.was_published == 'true'
+    if: needs.publish.result == 'success'
     runs-on: ubuntu-latest
     steps:
       - name: Notify dependents
