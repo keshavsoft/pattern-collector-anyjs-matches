@@ -6,8 +6,8 @@ const require = createRequire(import.meta.url);
 const v = getLatestVersion();
 const latestModule = require(`./bin/${v}/index.js`);
 
-const load = ({ fileContent, searchRegex, showLog }) => {
-    return latestModule.default({ fileContent, searchRegex, showLog });
+const load = (args) => {
+    return latestModule.default(args);
 };
 
 export default load;
