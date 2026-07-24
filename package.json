@@ -1,6 +1,6 @@
 {
   "name": "pattern-collector-anyjs-matches",
-  "version": "1.3.3",
+  "version": "1.3.4",
   "description": "A high-performance pattern matching and line tracking utility for JavaScript/ESM, wrapping pattern-collector.",
   "keywords": [
     "pattern",
